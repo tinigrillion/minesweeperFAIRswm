@@ -1,31 +1,26 @@
 """
 Implementation of command-line minesweeper by Kylie Ying
+Github: https://www.github.com/kying18
 
-YouTube Kylie Ying: https://www.youtube.com/ycubed 
-Twitch KylieYing: https://www.twitch.tv/kylieying 
-Twitter @kylieyying: https://twitter.com/kylieyying 
-Instagram @kylieyying: https://www.instagram.com/kylieyying/ 
-Website: https://www.kylieying.com
-Github: https://www.github.com/kying18 
-Programmer Beast Mode Spotify playlist: https://open.spotify.com/playlist/4Akns5EUb3gzmlXIdsJkPs?si=qGc4ubKRRYmPHAJAIrCxVQ 
-
-Project specs, files, code all over the place? Start using Backlog for efficient management!! There is a free tier: https://cutt.ly/ehxImv5
+Modified.
 """
 
 import random
 import re
 
-# lets create a board object to represent the minesweeper game
-# this is so that we can just say "create a new board object", or
-# "dig here", or "render this game for this object"
+
 class Board:
     def __init__(self, dim_size, num_bombs):
-        # let's keep track of these parameters. they'll be helpful later
+        """Creates a board object that represents the minesweeper game.
+
+        :param dim_size: Size of the board.
+        :type dim_size: int
+        :param num_bombs: Number of planted bombs.
+        :type num_bombs: int
+        """
         self.dim_size = dim_size
         self.num_bombs = num_bombs
 
-        # let's create the board
-        # helper function!
         self.board = self.make_new_board() # plant the bombs
         self.assign_values_to_board()
 
@@ -34,18 +29,19 @@ class Board:
         self.dug = set() # if we dig at 0, 0, then self.dug = {(0,0)}
 
     def make_new_board(self):
-        # construct a new board based on the dim size and num bombs
-        # we should construct the list of lists here (or whatever representation you prefer,
-        # but since we have a 2-D board, list of lists is most natural)
+        """Constructs the new board and plants the bombs.
 
-        # generate a new board
+        The board is an array like this:
+        |  [[None, None, ..., None],
+        |  [None, None, ..., None],
+        |  [...                  ],
+        |  [None, None, ..., None]]
+        |  Random positions of the array are populated with "*", representing bombs.
+
+        :returns: The board array.
+        :rtype: List of lists
+        """
         board = [[None for _ in range(self.dim_size)] for _ in range(self.dim_size)]
-        # this creates an array like this:
-        # [[None, None, ..., None],
-        #  [None, None, ..., None],
-        #  [...                  ],
-        #  [None, None, ..., None]]
-        # we can see how this represents a board!
 
         # plant the bombs
         bombs_planted = 0
@@ -64,9 +60,7 @@ class Board:
         return board
 
     def assign_values_to_board(self):
-        # now that we have the bombs planted, let's assign a number 0-8 for all the empty spaces, which
-        # represents how many neighboring bombs there are. we can precompute these and it'll save us some
-        # effort checking what's around the board later on :)
+        """This docstring needs editing!"""
         for r in range(self.dim_size):
             for c in range(self.dim_size):
                 if self.board[r][c] == '*':
@@ -75,18 +69,23 @@ class Board:
                 self.board[r][c] = self.get_num_neighboring_bombs(r, c)
 
     def get_num_neighboring_bombs(self, row, col):
-        # let's iterate through each of the neighboring positions and sum number of bombs
-        # top left: (row-1, col-1)
-        # top middle: (row-1, col)
-        # top right: (row-1, col+1)
-        # left: (row, col-1)
-        # right: (row, col+1)
-        # bottom left: (row+1, col-1)
-        # bottom middle: (row+1, col)
-        # bottom right: (row+1, col+1)
+        """Counts the number of neighbouring bombs in each position of the board that does not contain a bomb.
 
-        # make sure to not go out of bounds!
+        Each position with coordinates (row,col) has following neighbours:
+        top left: (row-1, col-1)
+        top middle: (row-1, col)
+        top right: (row-1, col+1)
+        left: (row, col-1)
+        right: (row, col+1)
+        bottom left: (row+1, col-1)
+        bottom middle: (row+1, col)
+        bottom right: (row+1, col+1)
 
+        :param row: Row coordinate of examined position.
+        :param col: Column coordinate of examined position.
+        :return: The number of neighbouring bombs
+        :rtype: int
+        """
         num_neighboring_bombs = 0
         for r in range(max(0, row-1), min(self.dim_size-1, row+1)+1):
             for c in range(max(0, col-1), min(self.dim_size-1, col+1)+1):
@@ -99,13 +98,7 @@ class Board:
         return num_neighboring_bombs
 
     def dig(self, row, col):
-        # dig at that location!
-        # return True if successful dig, False if bomb dug
-
-        # a few scenarios:
-        # hit a bomb -> game over
-        # dig at location with neighboring bombs -> finish dig
-        # dig at location with no neighboring bombs -> recursively dig neighbors!
+        """This docstring needs editing!"""
 
         self.dug.add((row, col)) # keep track that we dug here
 
@@ -125,11 +118,7 @@ class Board:
         return True
 
     def __str__(self):
-        # this is a magic function where if you call print on this object,
-        # it'll print out what this function returns!
-        # return a string that shows the board to the player
-
-        # first let's create a new array that represents what the user would see
+        """This docstring needs editing!"""
         visible_board = [[None for _ in range(self.dim_size)] for _ in range(self.dim_size)]
         for row in range(self.dim_size):
             for col in range(self.dim_size):
@@ -177,14 +166,20 @@ class Board:
 
 # play the game
 def play(dim_size=10, num_bombs=10):
-    # Step 1: create the board and plant the bombs
-    board = Board(dim_size, num_bombs)
+    """Plays the minesweeper game.
 
-    # Step 2: show the user the board and ask for where they want to dig
-    # Step 3a: if location is a bomb, show game over message
-    # Step 3b: if location is not a bomb, dig recursively until each square is at least
-    #          next to a bomb
-    # Step 4: repeat steps 2 and 3a/b until there are no more places to dig -> VICTORY!
+    |  Step 1: Creates the board and plant the bombs
+    |  Step 2: Shows the user the board and asks where they want to dig
+    |  Step 3a: If location is a bomb, shows game over message
+    |  Step 3b: If location is not a bomb, digs recursively until each square is at least next to a bomb
+    |  Step 4: Repeats steps 2 and 3a/b until there are no more places to dig -> VICTORY!
+
+    :param dim_size: Size of the board. (default: 10)
+    :type dim_size: int
+    :param num_bombs: Number of planted bombs. (default: 10)
+    :type num_bombs: int
+    """
+    board = Board(dim_size, num_bombs)
     safe = True 
 
     while len(board.dug) < board.dim_size ** 2 - num_bombs:
