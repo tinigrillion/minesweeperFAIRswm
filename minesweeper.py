@@ -1,6 +1,6 @@
 """
 Implementation of command-line minesweeper by Kylie Ying
-Github: https://www.github.com/kying18
+forked from https://github.com/tinigrillion/minesweeperFAIRswm/
 
 Modified.
 """
