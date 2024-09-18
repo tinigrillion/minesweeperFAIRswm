@@ -98,7 +98,13 @@ class Board:
         return num_neighboring_bombs
 
     def dig(self, row, col):
-        """This docstring needs editing!"""
+        """Start digging a position and return whether *no* bomb has been hit
+
+        :param row: Row coordinate of position to dig.
+        :param col: Column coordinate of position to dig.
+        :return: Whether *no* bomb as been hit
+        :rtype: Boolean
+        """
 
         self.dug.add((row, col)) # keep track that we dug here
 
